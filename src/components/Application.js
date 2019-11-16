@@ -2,28 +2,28 @@ import React, { useState } from "react";
 
 import DayList from "components/DayList";
 import "components/Application.scss";
+import Appointment from "./Appointment";
 
 const days = [
   {
     id: 1,
     name: "Monday",
-    spots: 2,
+    spots: 2
   },
   {
     id: 2,
     name: "Tuesday",
-    spots: 5,
+    spots: 5
   },
   {
     id: 3,
     name: "Wednesday",
-    spots: 0,
-  },
+    spots: 0
+  }
 ];
 
 export default function Application(props) {
   const [day, setDay] = useState("Monday");
-  const [interviewer, setInterviewer] = useState(5);
   return (
     <main className="layout">
       <section className="sidebar">
@@ -32,7 +32,9 @@ export default function Application(props) {
         </nav>
       </section>
       <section className="schedule">
-        {/* Replace this with the schedule elements durint the "The Scheduler" activity. */}
+        {props.appointments.map(appointment => (
+          <Appointment key={appointment.id} {...appointment} />
+        ))}
       </section>
     </main>
   );
