@@ -3,7 +3,6 @@ import React from "react";
 import DayListItem from "components/DayListItem";
 
 const DayList = ({ days, day, setDay }) => {
-  console.log("days", days);
   return (
     <ul>
       {days.map((currentDay, index) => {
