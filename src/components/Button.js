@@ -3,10 +3,10 @@ import classNames from "classnames";
 
 import "components/Button.scss";
 
-export default function Button({ type, children, disabled, onClick }) {
+const Button = ({ type, children, disabled, onClick }) => {
   const buttonClassname = classNames("button", {
     "button--danger": type === "danger",
-    "button--confirm": type === "confirm"
+    "button--confirm": type === "confirm",
   });
 
   return (
@@ -14,4 +14,5 @@ export default function Button({ type, children, disabled, onClick }) {
       {children}
     </button>
   );
-}
+};
+export default Button;
