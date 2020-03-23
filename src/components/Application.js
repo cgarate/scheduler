@@ -3,7 +3,11 @@ import axios from "axios";
 
 import DayList from "components/DayList";
 import Appointment from "./Appointment";
-import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "./selectors";
+import {
+  getAppointmentsForDay,
+  getInterview,
+  getInterviewersForDay,
+} from "./selectors";
 import "components/Application.scss";
 
 export default function Application(props) {
@@ -35,10 +39,41 @@ export default function Application(props) {
       .catch(error => console.log(error));
   }, []);
 
+  const bookInterview = (id, interview) => {
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview },
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment,
+    };
+
+    const updateDB = Promise.resolve(
+      axios.put(`/api/appointments/${id}`, {
+        interview: {
+          student: interview.student,
+          interviewer: interview.interviewer,
+        },
+      }),
+    );
+    updateDB
+      .then(response => {
+        setState({
+          ...state,
+          appointments,
+        });
+        console.log("Application -> response", response);
+      })
+      .catch(error => console.log(error));
+    return updateDB;
+  };
+
   const schedule = appointments.map(appointment => {
     const interview = getInterview(state, appointment.interview);
     return (
       <Appointment
+        bookInterview={bookInterview}
         key={appointment.id}
         {...appointment}
         interview={interview}
