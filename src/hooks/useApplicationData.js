@@ -9,6 +9,30 @@ const useApplicationData = () => {
     interviewers: {},
   });
   const setDay = day => setState({ ...state, day });
+  // retrieve the appointments ids for the day
+  const appointmentsForDay = (dayName, state) =>
+    state.days.find(day => day.name === dayName).appointments;
+  const getDayIndex = state.days.findIndex(day => day.name === state.day);
+
+  const getNewSpotsCount = (day, state) => {
+    let spotsOpen = 0;
+    appointmentsForDay(day, state).forEach(id => {
+      if (!state.appointments[id].interview) {
+        spotsOpen = spotsOpen + 1;
+      }
+    });
+    return spotsOpen;
+  };
+
+  const updateSpotsCount = state => {
+    const stateCopy = { ...state };
+    stateCopy.days = [...stateCopy.days];
+    stateCopy.days[getDayIndex] = {
+      ...stateCopy.days[getDayIndex],
+      spots: getNewSpotsCount(state.day, state),
+    };
+    return stateCopy;
+  };
 
   useEffect(() => {
     Promise.all([
@@ -51,6 +75,9 @@ const useApplicationData = () => {
           ...state,
           appointments,
         });
+        setState(prev => ({
+          ...updateSpotsCount(prev),
+        }));
       })
       .catch(error => console.log("update", error));
     return updateDB;
@@ -71,7 +98,10 @@ const useApplicationData = () => {
       axios.delete(`/api/appointments/${id}`),
     );
     deleteAppointment
-      .then(() => setState({ ...state, appointments }))
+      .then(() => {
+        setState(prev => ({ ...prev, appointments }));
+        setState(prev => ({ ...updateSpotsCount(prev) }));
+      })
       .catch(error => console.log("delete", error));
 
     return deleteAppointment;
