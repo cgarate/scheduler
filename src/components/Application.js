@@ -58,15 +58,35 @@ export default function Application(props) {
       }),
     );
     updateDB
-      .then(response => {
+      .then(() => {
         setState({
           ...state,
           appointments,
         });
-        console.log("Application -> response", response);
       })
-      .catch(error => console.log(error));
+      .catch(error => console.log("update", error));
     return updateDB;
+  };
+
+  const deleteInterview = id => {
+    const appointment = {
+      ...state.appointments[id],
+      interview: null,
+    };
+
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment,
+    };
+
+    const deleteAppointment = Promise.resolve(
+      axios.delete(`/api/appointments/${id}`),
+    );
+    deleteAppointment
+      .then(() => setState({ ...state, appointments }))
+      .catch(error => console.log("delete", error));
+
+    return deleteAppointment;
   };
 
   const schedule = appointments.map(appointment => {
@@ -74,6 +94,7 @@ export default function Application(props) {
     return (
       <Appointment
         bookInterview={bookInterview}
+        deleteInterview={deleteInterview}
         key={appointment.id}
         {...appointment}
         interview={interview}
