@@ -8,7 +8,7 @@ import {
   getInterviewersForDay,
 } from "./selectors";
 import "components/Application.scss";
-import useApplicationData from "../hooks/useApplicationData";
+import useApplicationDataWithUseReducer from "../hooks/useApplicationDataWithUseReducer";
 
 export default function Application(props) {
   const {
@@ -16,7 +16,7 @@ export default function Application(props) {
     setDay,
     bookInterview,
     deleteInterview,
-  } = useApplicationData();
+  } = useApplicationDataWithUseReducer();
 
   const appointments = getAppointmentsForDay(state, state.day);
   const interviewers = getInterviewersForDay(state, state.day);

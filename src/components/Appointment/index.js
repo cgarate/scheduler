@@ -95,7 +95,7 @@ const Appointment = ({
           onSave={saveAppointment}
           onCancel={() => back()}
           name={interview.student}
-          interviewer={interview.interviewer}
+          interviewer={interview.interviewer.id}
         />
       )}
       {mode === SAVING && <Status message="Saving..." />}
