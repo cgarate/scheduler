@@ -26,11 +26,22 @@ const reducer = (state, action) => {
       break;
     case SET_SPOTS_COUNT:
       const getDayIndex = state.days.findIndex(day => day.name === state.day);
+      const appointmentsForDay = state.days.find(day => day.name === state.day)
+        .appointments;
+      const getNewSpotsCount = state => {
+        let spotsOpen = 0;
+        appointmentsForDay.forEach(id => {
+          if (!state.appointments[id].interview) {
+            spotsOpen = spotsOpen + 1;
+          }
+        });
+        return spotsOpen;
+      };
       result = { ...state };
       result.days = [...result.days];
       result.days[getDayIndex] = {
         ...result.days[getDayIndex],
-        spots: action.value,
+        spots: getNewSpotsCount(state),
       };
       break;
     default:
@@ -50,18 +61,6 @@ const useApplicationDataWithUseReducer = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const setDay = day => dispatch({ type: SET_DAY, value: day });
-  const appointmentsForDay = (dayName, state) =>
-    state.days.find(day => day.name === dayName).appointments;
-
-  const getNewSpotsCount = (day, state) => {
-    let spotsOpen = 0;
-    appointmentsForDay(day, state).forEach(id => {
-      if (!state.appointments[id].interview) {
-        spotsOpen = spotsOpen + 1;
-      }
-    });
-    return spotsOpen;
-  };
 
   useEffect(() => {
     Promise.all([
@@ -94,7 +93,7 @@ const useApplicationDataWithUseReducer = () => {
         dispatch({ type: SET_INTERVIEW, value: appointments });
         dispatch({
           type: SET_SPOTS_COUNT,
-          value: getNewSpotsCount(state.day, state),
+          value: null,
         });
       })
       .catch(error => console.log("delete", error));
@@ -128,7 +127,7 @@ const useApplicationDataWithUseReducer = () => {
         });
         dispatch({
           type: SET_SPOTS_COUNT,
-          value: getNewSpotsCount(state.day, state),
+          value: null,
         });
       })
       .catch(error => console.log("update", error));
