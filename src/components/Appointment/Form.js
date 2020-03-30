@@ -27,6 +27,7 @@ const Form = props => {
             placeholder="Enter Student Name"
             onChange={event => setName(event.target.value)}
             value={name}
+            autoFocus
           />
         </form>
         <InterviewerList
