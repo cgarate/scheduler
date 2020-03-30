@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import "components/Appointment/styles.scss";
 import useVisualMode from "../../hooks/useVisualMode";
@@ -41,6 +41,15 @@ const Appointment = ({
   const switchToDeleting = () => transition(DELETING, true);
   const switchToErrorDelete = () => transition(ERROR_DELETE, true);
 
+  useEffect(() => {
+    if (mode === EMPTY && interview) {
+      transition(SHOW);
+    }
+    if (mode === SHOW && !interview) {
+      transition(EMPTY);
+    }
+  }, [interview, transition, mode]);
+
   const saveAppointment = (name, interviewer) => {
     const interview = {
       student: name,
@@ -74,7 +83,7 @@ const Appointment = ({
       <Header time={time} />
 
       {mode === EMPTY && <Empty onAdd={switchToCreate} />}
-      {mode === SHOW && (
+      {mode === SHOW && interview && (
         <Show
           student={interview.student}
           interviewer={interview.interviewer.name}
@@ -106,10 +115,12 @@ const Appointment = ({
           onClose={() => back()}
         />
       )}
-      {mode === ERROR_DELETE && <Error
+      {mode === ERROR_DELETE && (
+        <Error
           message="Oopsie Daysies! I could not delete the appointment!"
           onClose={() => back()}
-        />}
+        />
+      )}
       {mode === CONFIRM && (
         <Confirm
           message="Are you sure you want to cancel the appointment?"
