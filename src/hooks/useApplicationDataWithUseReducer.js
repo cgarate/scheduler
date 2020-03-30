@@ -4,11 +4,12 @@ import {
   SET_INTERVIEW,
   SET_DAY,
   SET_APPLICATION_DATA,
-  SET_SPOTS_COUNT,
 } from "../constants";
 
 const reducer = (state, action) => {
   let result;
+  const getDayIndex = state.days.findIndex(day => day.name === state.day);
+
   switch (action.type) {
     case SET_DAY:
       result = { ...state, day: action.value };
@@ -22,26 +23,22 @@ const reducer = (state, action) => {
       };
       break;
     case SET_INTERVIEW:
-      result = { ...state, appointments: action.value };
-      break;
-    case SET_SPOTS_COUNT:
-      const getDayIndex = state.days.findIndex(day => day.name === state.day);
-      const appointmentsForDay = state.days.find(day => day.name === state.day)
-        .appointments;
-      const getNewSpotsCount = state => {
-        let spotsOpen = 0;
-        appointmentsForDay.forEach(id => {
-          if (!state.appointments[id].interview) {
-            spotsOpen = spotsOpen + 1;
-          }
-        });
-        return spotsOpen;
+      result = {
+        ...state,
+        appointments: {
+          ...state.appointments,
+          [action.id]: {
+            ...state.appointments[action.id],
+            interview: { ...action.interview },
+          },
+        },
+        days: [...state.days],
       };
-      result = { ...state };
-      result.days = [...result.days];
       result.days[getDayIndex] = {
         ...result.days[getDayIndex],
-        spots: getNewSpotsCount(state),
+        spots: action.interview
+          ? result.days[getDayIndex].spots - 1
+          : result.days[getDayIndex].spots + 1,
       };
       break;
     default:
@@ -58,10 +55,13 @@ const useApplicationDataWithUseReducer = () => {
     appointments: {},
     interviewers: {},
   };
+  // Websocket
+  const ws = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const setDay = day => dispatch({ type: SET_DAY, value: day });
 
+  // Database
   useEffect(() => {
     Promise.all([
       Promise.resolve(axios.get("api/days")),
@@ -74,43 +74,34 @@ const useApplicationDataWithUseReducer = () => {
       .catch(error => console.log(error));
   }, []);
 
+  useEffect(() => {
+    ws.onopen = event => {
+      ws.send("ping");
+    };
+    ws.onclose = () => {
+      ws.close();
+    };
+    return () => ws.close();
+  });
+
+  useEffect(() => {
+    ws.onmessage = event => {
+      const message = JSON.parse(event.data);
+      if (message.type === SET_INTERVIEW) {
+        dispatch(message);
+      }
+    };
+  });
+
   const deleteInterview = id => {
-    const appointment = {
-      ...state.appointments[id],
-      interview: null,
-    };
-
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment,
-    };
-
     const deleteAppointment = Promise.resolve(
       axios.delete(`/api/appointments/${id}`),
     );
-    deleteAppointment
-      .then(() => {
-        dispatch({ type: SET_INTERVIEW, value: appointments });
-        dispatch({
-          type: SET_SPOTS_COUNT,
-          value: null,
-        });
-      })
-      .catch(error => console.log("delete", error));
 
     return deleteAppointment;
   };
 
   const bookInterview = (id, interview) => {
-    const appointment = {
-      ...state.appointments[id],
-      interview: { ...interview },
-    };
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment,
-    };
-
     const updateDB = Promise.resolve(
       axios.put(`/api/appointments/${id}`, {
         interview: {
@@ -119,18 +110,7 @@ const useApplicationDataWithUseReducer = () => {
         },
       }),
     );
-    updateDB
-      .then(() => {
-        dispatch({
-          type: SET_INTERVIEW,
-          value: appointments,
-        });
-        dispatch({
-          type: SET_SPOTS_COUNT,
-          value: null,
-        });
-      })
-      .catch(error => console.log("update", error));
+
     return updateDB;
   };
 
