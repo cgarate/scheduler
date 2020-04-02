@@ -29,15 +29,21 @@ const InterviewerList = ({ value, interviewers, onChange }) => {
 InterviewerList.propTypes = {
   value: PropTypes.number,
   onChange: PropTypes.func.isRequired,
-  interviewers: PropTypes.shape({
-    id: PropTypes.objectOf(
-      PropTypes.shape({
-        id: PropTypes.number,
-        name: PropTypes.string,
-        avatar: PropTypes.string,
-      }),
-    ),
-  }),
+  // interviewers: PropTypes.shape({
+  //   id: PropTypes.number,
+  //   name: PropTypes.string,
+  //   avatar: PropTypes.string,
+  // }),
 };
 
 export default InterviewerList;
+
+// PropTypes.shape({
+//     id: PropTypes.objectOf(
+//       PropTypes.shape({
+//         id: PropTypes.number,
+//         name: PropTypes.string,
+//         avatar: PropTypes.string,
+//       }),
+//     ),
+//   }),

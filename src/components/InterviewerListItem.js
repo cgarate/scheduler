@@ -1,5 +1,6 @@
 import React from "react";
 import classNames from "classnames";
+import PropTypes from "prop-types";
 
 import "components/InterviewerListItem.scss";
 
@@ -19,5 +20,12 @@ const InterviewerListItem = ({
     </li>
   );
 };
+
+InterviewerListItem.propTypes = {
+  name: PropTypes.string,
+  avatar: PropTypes.string,
+  selected: PropTypes.bool,
+  onChange: PropTypes.func.isRequired,
+}
 
 export default InterviewerListItem;
