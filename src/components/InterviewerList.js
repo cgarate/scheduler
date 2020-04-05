@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import InterviewerListItem from "components/InterviewerListItem";
 import "components/InterviewerList.scss";
@@ -16,7 +17,7 @@ const InterviewerList = ({ value, interviewers, onChange }) => {
               name={currentInterviewer.name}
               avatar={currentInterviewer.avatar}
               selected={currentInterviewer.id === value}
-              onChange={(event) => onChange(currentInterviewer.id)}
+              onChange={() => onChange(currentInterviewer.id)}
             />
           );
         })}
@@ -25,4 +26,24 @@ const InterviewerList = ({ value, interviewers, onChange }) => {
   );
 };
 
+InterviewerList.propTypes = {
+  value: PropTypes.number,
+  onChange: PropTypes.func.isRequired,
+  // interviewers: PropTypes.shape({
+  //   id: PropTypes.number,
+  //   name: PropTypes.string,
+  //   avatar: PropTypes.string,
+  // }),
+};
+
 export default InterviewerList;
+
+// PropTypes.shape({
+//     id: PropTypes.objectOf(
+//       PropTypes.shape({
+//         id: PropTypes.number,
+//         name: PropTypes.string,
+//         avatar: PropTypes.string,
+//       }),
+//     ),
+//   }),

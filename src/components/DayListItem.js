@@ -1,5 +1,6 @@
 import React from "react";
 import classNames from "classnames";
+import PropTypes from "prop-types";
 
 import "components/DayListItem.scss";
 
@@ -23,5 +24,12 @@ const DayListItem = ({ name, spots, selected, setDay }) => {
     </li>
   );
 };
+
+DayListItem.propTypes = {
+  name: PropTypes.string,
+  spots: PropTypes.number,
+  selected: PropTypes.bool,
+  setDay: PropTypes.func.isRequired,
+}
 
 export default DayListItem;
