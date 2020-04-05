@@ -5,7 +5,6 @@ import Button from "components/Button";
 const Form = props => {
   const [name, setName] = useState(props.name || "");
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
-
   const reset = () => {
     setName("");
     setInterviewer(null);
@@ -28,6 +27,7 @@ const Form = props => {
             onChange={event => setName(event.target.value)}
             value={name}
             autoFocus
+            data-testid="student-name-input"
           />
         </form>
         <InterviewerList
