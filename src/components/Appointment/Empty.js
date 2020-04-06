@@ -8,6 +8,7 @@ const Empty = ({ onAdd }) => {
         src="images/add.png"
         alt="Add"
         onClick={onAdd}
+        data-testid="icon-add-appointment"
       />
     </main>
   );
