@@ -10,6 +10,8 @@ const useApplicationDataWithUseReducer = () => {
     appointments: {},
     interviewers: {},
   };
+  // Websocket
+  const ws = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const setDay = day => dispatch({ type: SET_DAY, value: day });
@@ -27,15 +29,30 @@ const useApplicationDataWithUseReducer = () => {
       .catch(error => console.log(error));
   }, []);
 
+  useEffect(() => {
+    ws.onopen = event => {
+      ws.send("ping");
+    };
+    ws.onclose = () => {
+      ws.close();
+    };
+    return () => ws.close();
+  });
+
+  useEffect(() => {
+    ws.onmessage = event => {
+      const message = JSON.parse(event.data);
+      if (message.type === SET_INTERVIEW) {
+        dispatch(message);
+      }
+    };
+  });
+
   const deleteInterview = id => {
     const deleteAppointment = Promise.resolve(
       axios.delete(`/api/appointments/${id}`),
     );
-    dispatch({
-      type: SET_INTERVIEW,
-      id,
-      interview: null,
-    });
+
     return deleteAppointment;
   };
 
@@ -48,11 +65,6 @@ const useApplicationDataWithUseReducer = () => {
         },
       }),
     );
-    dispatch({
-      type: SET_INTERVIEW,
-      id,
-      interview,
-    });
 
     return updateDB;
   };

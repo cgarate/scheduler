@@ -49,6 +49,12 @@
   "jest": {
     "watchPathIgnorePatterns": [
       "<rootDir>/node_modules/"
-    ]
+    ],
+    "collectCoverageFrom": [
+    "src/**/*.js",
+    "!src/index.js",
+    "!src/hooks/useApplicationData.js",
+    "!src/hooks/useApplicationDataWIthUseReducerAndWS.js"
+  ]
   }
 }
