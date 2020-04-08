@@ -36,12 +36,14 @@ export default function Application(props) {
   });
   return (
     <main className="layout">
-      <section className="sidebar">
+      <section className="sidebar" data-testid="daylist-section">
         <nav>
           <DayList days={state.days} day={state.day} setDay={setDay} />
         </nav>
       </section>
-      <section className="schedule">{schedule}</section>
+      <section className="schedule" data-testid="schedule-section">
+        {schedule}
+      </section>
     </main>
   );
 }

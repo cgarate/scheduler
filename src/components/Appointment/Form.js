@@ -38,13 +38,18 @@ const Form = props => {
       </section>
       <section className="appointment__card-right">
         <section className="appointment__actions">
-          <Button onClick={cancel} danger>
+          <Button
+            onClick={cancel}
+            danger
+            data-testid="cancel-appointment-button"
+          >
             Cancel
           </Button>
           <Button
             disabled={name && interviewer ? false : true}
             onClick={() => props.onSave(name, interviewer)}
             confirm
+            data-testid="save-appointment-button"
           >
             Save
           </Button>

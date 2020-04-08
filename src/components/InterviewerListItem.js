@@ -14,7 +14,7 @@ const InterviewerListItem = ({
     "interviewers__item--selected": selected,
   });
   return (
-    <li className={itemClass} onClick={onChange}>
+    <li className={itemClass} onClick={onChange} data-testid="interviewer-item">
       <img className="interviewers__item-image" src={avatar} alt={name} />
       {selected && name}
     </li>
