@@ -6,8 +6,8 @@ const Confirm = ({message, onConfirm, onCancel}) => {
     <main className="appointment__card appointment__card--confirm">
       <h1 className="text--semi-bold">{message}</h1>
       <section className="appointment__actions" data-testid="confirm-section">
-        <Button onClick={onCancel} danger>Cancel</Button>
-        <Button onClick={onConfirm} danger>Confirm</Button>
+        <Button onClick={onCancel} type="danger">Cancel</Button>
+        <Button onClick={onConfirm} type="danger">Confirm</Button>
       </section>
     </main>
   );

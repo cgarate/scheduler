@@ -40,7 +40,7 @@ const Form = props => {
         <section className="appointment__actions">
           <Button
             onClick={cancel}
-            danger
+            type="danger"
             data-testid="cancel-appointment-button"
           >
             Cancel
@@ -48,7 +48,7 @@ const Form = props => {
           <Button
             disabled={name && interviewer ? false : true}
             onClick={() => props.onSave(name, interviewer)}
-            confirm
+            type="confirm"
             data-testid="save-appointment-button"
           >
             Save
