@@ -29,7 +29,7 @@ const reducer = (state, action) => {
           ...state.appointments,
           [action.id]: {
             ...state.appointments[action.id],
-            interview: { ...action.interview },
+            interview: action.interview ? { ...action.interview } : null,
           },
         },
         days: [...state.days],
