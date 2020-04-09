@@ -17,7 +17,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 9009 -s public --ci",
-    "build-storybook": "build-storybook -s public"
+    "build-storybook": "build-storybook -s public",
+    "cypress:open": "./node_modules/.bin/cypress open",
+    "cypress": "cypress open -P ."
   },
   "browserslist": {
     "production": [
@@ -41,6 +43,7 @@
     "@testing-library/jest-dom": "^4.0.0",
     "@testing-library/react": "^8.0.7",
     "babel-loader": "^8.0.5",
+    "cypress": "^4.3.0",
     "node-sass": "^4.11.0",
     "prop-types": "^15.7.2",
     "react-hooks-testing-library": "^0.6.0",
@@ -51,10 +54,10 @@
       "<rootDir>/node_modules/"
     ],
     "collectCoverageFrom": [
-    "src/**/*.js",
-    "!src/index.js",
-    "!src/hooks/useApplicationData.js",
-    "!src/hooks/useApplicationDataWIthUseReducerAndWS.js"
-  ]
+      "src/**/*.js",
+      "!src/index.js",
+      "!src/hooks/useApplicationData.js",
+      "!src/hooks/useApplicationDataWIthUseReducerAndWS.js"
+    ]
   }
 }

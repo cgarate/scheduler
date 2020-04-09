@@ -8,7 +8,7 @@ const InterviewerList = ({ value, interviewers, onChange }) => {
   return (
     <section className="interviewers">
       <h4 className="interviewers__header text--light">Interviewer</h4>
-      <ul className="interviewers__list">
+      <ul className="interviewers__list" data-testid="interviewers-list">
         {interviewers.map((currentInterviewer) => {
           return (
             <InterviewerListItem

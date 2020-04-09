@@ -3,7 +3,7 @@ import axios from "axios";
 import { SET_INTERVIEW, SET_DAY, SET_APPLICATION_DATA } from "../constants";
 import reducer from "../reducers/application";
 
-const useApplicationDataWithUseReducer = () => {
+const useApplicationDataWithUseReducerAndWS = () => {
   const initialState = {
     day: "Monday",
     days: [],
@@ -72,4 +72,4 @@ const useApplicationDataWithUseReducer = () => {
   return { state, setDay, deleteInterview, bookInterview };
 };
 
-export default useApplicationDataWithUseReducer;
+export default useApplicationDataWithUseReducerAndWS;
