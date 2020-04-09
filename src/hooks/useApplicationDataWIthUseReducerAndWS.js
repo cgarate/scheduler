@@ -11,7 +11,9 @@ const useApplicationDataWithUseReducerAndWS = () => {
     interviewers: {},
   };
   // Websocket
-  const ws = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
+  const ws = new WebSocket(
+    process.env.REACT_APP_WEBSOCKET_URL || "ws://localhost:8001",
+  );
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const setDay = day => dispatch({ type: SET_DAY, value: day });
