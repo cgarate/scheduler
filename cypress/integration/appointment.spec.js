@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /**
  * A) "should book an interview"
  *   1. Visits the root of our web server
