@@ -21,7 +21,7 @@ jobs:
 
   deploy:
     machine:
-      enabled: true
+      image: "ubuntu-2004:202104-01"
 
     working_directory: ~/client
 
